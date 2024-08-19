@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  tidb:
+    image: pingcap/tidb:v7.1.0
+    container_name: tidb
+    environment:
+      - TIDB_PORT=4000
+      - TIDB_HOST=gateway01.eu-central-1.prod.aws.tidbcloud.com
+    ports:
+      - "4000:4000"
+    volumes:
+      - tidb_data:/var/lib/tidb
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: streamlit
+    environment:
+      - TIDB_HOST=tidb
+      - TIDB_PORT=4000
+      - TIDB_USER=${TIDB_USER}
+      - TIDB_PASSWORD=${TIDB_PASSWORD}
+      - MODEL_NAME=${MODEL_NAME}
+      - INDEX_NAME=${INDEX_NAME}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    depends_on:
+      - tidb
+      - ollama
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    depends_on:
+      - tidb
+
+volumes:
+  tidb_data:
+  ollama_data:
+  grafana_data:
