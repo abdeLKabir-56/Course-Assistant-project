@@ -52,3 +52,15 @@ The application allows users to select a course and ask questions. It uses AI mo
 
 ## Getting Started
 To get started with Course Assistant, clone this repository and follow the instructions in the `Dockerfile` and `docker-compose.yml` for setting up your environment.
+
+## Contributing
+
+We welcome contributions to the Course Assistant project! To get started, please fork the repository and submit a pull request with your changes. For detailed guidelines, refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+We would like to thank the TiDB community and the Streamlit team for their support and excellent documentation, which greatly facilitated the development process.
